@@ -34,9 +34,10 @@ pipeline {
            agent any
            steps {
               script {
-//TODO: FIX          curl http://localhost:${PORT_EXPOSED} | grep -q "Hello world!"
+                //                     curl http://172.17.0.1:${PORT_EXPOSED} | grep -q "Hello world!"
+
                 sh '''
-                    echo "Hello world!"
+                echo "Hello world!"
                 '''
               }
            }
@@ -53,7 +54,6 @@ pipeline {
           }
      }
 
-/*
      stage ('Login and Push Image on docker hub') {
           agent any
         environment {
@@ -68,8 +68,7 @@ pipeline {
              }
           }
       }    
-*/
-
+     
      stage('Push image in staging and deploy it') {
        when {
               expression { GIT_BRANCH == 'origin/master' }
@@ -91,6 +90,8 @@ pipeline {
         }
      }
 
+
+
      stage('Push image in production and deploy it') {
        when {
               expression { GIT_BRANCH == 'origin/production' }
@@ -110,16 +111,15 @@ pipeline {
             '''
           }
         }
-        }
-
-        
-    post {
-        success {
-          slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-          }
-        failure {
-              slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-            }   
-      }
+     }
   }
+
+  post {
+       success {
+         slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+         }
+      failure {
+            slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+          }   
+    }
 }
