@@ -113,10 +113,12 @@ pipeline {
           }
         }
       post {
-        always {
+        succes {
+            slackSend ("Find Status of Pipeline:- ${currentBuild.currentResult} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${BUILD_URL}")
+        }
+        succes {
             //Add channel name
-            slackSend channel: 'mdi-jenkins-canal',
-            message: "Find Status of Pipeline:- ${currentBuild.currentResult} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${BUILD_URL}"
+            slackSend ("Find Status of Pipeline:- ${currentBuild.currentResult} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${BUILD_URL}")
         }
     }
      }
