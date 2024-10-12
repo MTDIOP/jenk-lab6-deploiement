@@ -25,7 +25,7 @@ pipeline {
                     echo "Clean Environment"
                     docker rm -f $IMAGE_NAME || echo "container does not exist"
                     docker run --name $IMAGE_NAME -d -p ${PORT_EXPOSED}:5000 -e PORT=5000 ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG
-                    sleep 10
+                    sleep 5
                  '''
                }
             }
@@ -53,6 +53,7 @@ pipeline {
           }
      }
 
+/*
      stage ('Login and Push Image on docker hub') {
           agent any
         environment {
@@ -67,7 +68,8 @@ pipeline {
              }
           }
       }    
-     
+*/
+
      stage('Push image in staging and deploy it') {
        when {
               expression { GIT_BRANCH == 'origin/master' }
