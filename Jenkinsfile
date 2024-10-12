@@ -91,8 +91,6 @@ pipeline {
         }
      }
 
-
-
      stage('Push image in production and deploy it') {
        when {
               expression { GIT_BRANCH == 'origin/production' }
@@ -112,15 +110,16 @@ pipeline {
             '''
           }
         }
-      post {
-        succes {
-            slackSend ("Find Status of Pipeline:- ${currentBuild.currentResult} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${BUILD_URL}")
         }
-        succes {
-            //Add channel name
-            slackSend ("Find Status of Pipeline:- ${currentBuild.currentResult} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${BUILD_URL}")
-        }
-    }
-     }
+
+        
+    post {
+        success {
+          slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+          }
+        failure {
+              slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            }   
+      }
   }
 }
